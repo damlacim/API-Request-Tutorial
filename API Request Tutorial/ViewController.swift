@@ -11,11 +11,43 @@ class ViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        // Do any additional setup after loading the view.
+        let url = "https://api.sunrise-sunset.org/json?lat=36.7201600&lng=-4.4203400&date=2021-12-16"
+        getData(from: url)
     }
-    
-    let url = "https://api.sunrise-sunset.org/json?lat=36.7201600&lng=-4.4203400&date=2021-12-16"
-    
+    private func getData(from url: String) {
+        
+        let task = URLSession.shared.dataTask(with: URL(string: url)!, completionHandler: { data, response, error in
+            
+            guard let data = data, error == nil else {
+                print("something went wrong")
+                return
+            }
+            
+            var result: Response?
+            do {
+                result = try JSONDecoder().decode(Response.self, from: data)
+            }
+            catch{
+                print(error)
+            }
+            
+            guard let json = result else {
+                return
+            }
+            
+            print(json.status)
+            print(json.results.sunrise)
+            print(json.results.sunset)
+            print(json.results.day_lenght)
+            
+            
+        })
+        
+        task.resume()
+        
+    }
+}
+
     struct Response: Codable {
         let results: MyResult
         let status: String
@@ -25,7 +57,7 @@ class ViewController: UIViewController {
         let sunrise: String
         let sunset: String
         let solar_noon: String
-        let day_lenght: String
+        let day_lenght: Int
         let civil_twilight_begin: String
         let civil_twilight_end: String
         let nautical_twilight_begin: String
@@ -35,8 +67,6 @@ class ViewController: UIViewController {
         
     }
 
-
-}
 
 /*
  {
