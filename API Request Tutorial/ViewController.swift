@@ -53,7 +53,7 @@ struct Response: Codable {
     let status: String
 }
 
-// MARK: - Results
+
 struct Results: Codable {
     let sunrise, sunset, solarNoon, dayLength: String
     let civilTwilightBegin, civilTwilightEnd, nauticalTwilightBegin, nauticalTwilightEnd: String
