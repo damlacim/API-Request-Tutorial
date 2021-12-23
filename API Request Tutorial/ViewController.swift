@@ -48,13 +48,13 @@ class ViewController: UIViewController {
     }
 }
 
-struct Response: Codable {
+struct Response: Decodable {
     let results: Results
     let status: String
 }
 
 
-struct Results: Codable {
+struct Results: Decodable {
     let sunrise, sunset, solarNoon, dayLength: String
     let civilTwilightBegin, civilTwilightEnd, nauticalTwilightBegin, nauticalTwilightEnd: String
     let astronomicalTwilightBegin, astronomicalTwilightEnd: String
