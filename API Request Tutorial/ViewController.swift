@@ -8,45 +8,51 @@
 import UIKit
 
 class ViewController: UIViewController {
+    
+    let url = "https://api.sunrise-sunset.org/json?lat=36.7201600&lng=-4.4203400&date=2021-12-16"
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        let url = "https://api.sunrise-sunset.org/json?lat=36.7201600&lng=-4.4203400&date=2021-12-16"
         getData(from: url)
     }
     private func getData(from url: String) {
         
-        let task = URLSession.shared.dataTask(with: URL(string: url)!, completionHandler: { data, response, error in
+        guard let url = URL(string: url) else {
+            return
+        }
+        
+        
+        let task = URLSession.shared.dataTask(with: url, completionHandler: { data, response, error in
+                
+        guard let data = data, error == nil else {
+                    print("something went wrong")
+                    return
             
-            guard let data = data, error == nil else {
-                print("something went wrong")
-                return
-            }
-            
+        }
             var result: Response?
             do {
+                
                 result = try JSONDecoder().decode(Response.self, from: data)
+                
             }
             catch{
                 print(error)
-            }
-            
+                }
             guard let json = result else {
                 return
+                
             }
-            
             print(json.status)
             print(json.results.sunrise)
             print(json.results.sunset)
             print(json.results.dayLength)
             
-            
         })
         
         task.resume()
-        
+            
+        }
     }
-}
 
 struct Response: Decodable {
     let results: Results
